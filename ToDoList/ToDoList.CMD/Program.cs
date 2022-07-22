@@ -1,4 +1,5 @@
 ﻿using System;
+using ToDoList.BL.Controller;
 using ToDoList.BL.Model;
 
 namespace ToDoList.CMD
@@ -7,10 +8,19 @@ namespace ToDoList.CMD
     {
         static void Main(string[] args)
         {
-            User u1 = new User();
-            User u2 = new User();
+            Console.WriteLine("Вас приветствует консольное приложение ToDoList");
 
+            Console.WriteLine("Введите ваше имя");
+            var name = Console.ReadLine();
 
+            Console.WriteLine("Введите ваш пол");
+            var gender = Console.ReadLine();
+
+            Console.WriteLine("Введите ваш возраст");
+            var year = int.Parse(Console.ReadLine());
+
+            var userController = new UserController(name, gender, year);
+            userController.Save();
         }
     }
 }
