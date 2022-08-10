@@ -30,12 +30,14 @@ namespace ToDoList.BL.Model
         /// <summary>
         /// Пол.
         /// </summary>
-        public Gender Gender { get; }
+        public Gender Gender { get; set; }
 
         /// <summary>
-        /// Возраст.
+        /// Дата рождения.
         /// </summary>
-        public int Year { get; set; }
+        public DateTime BirthDate { get; set; }
+
+        public int Age { get { return DateTime.Now.Year - BirthDate.Year; } }
 
         /// <summary>
         /// Создать нового пользователя
@@ -43,29 +45,39 @@ namespace ToDoList.BL.Model
         /// <param name="name">Имя. </param>
         /// <param name="gender">Пол. </param>
         /// <param name="year">Возраст. </param>
-        public User(string name, Gender gender, int year)
+        public User(string name, Gender gender, DateTime birthDate)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentNullException("Имя пользователя не может быть пустым или null", nameof(name));
             }
 
-            if (year <= 0)
+            if (DateTime.Now.Year - birthDate.Year >= 100 || DateTime.Now.Year - birthDate.Year <= 1)
             {
-                throw new ArgumentException("Некорректный возраст", nameof(year));
+                throw new ArgumentException("Некорректная дата рождения", nameof(birthDate));
             }
 
             Gender = gender ?? throw new ArgumentNullException("Пол не может быть null", nameof(gender));
 
-            Year = year;
+            BirthDate = birthDate;
             Name = name;
             ObjectNumber++;
             ID = ObjectNumber;
         }
 
+        public User(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentNullException("Имя пользователя не может быть пустым или null", nameof(name));
+            }
+
+            Name = name;
+        }
+
         public override string ToString()
         {
-            return Name;
+            return Name + " " + Age;
         }
     }
 }
