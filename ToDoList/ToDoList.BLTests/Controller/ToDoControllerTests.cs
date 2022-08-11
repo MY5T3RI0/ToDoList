@@ -15,6 +15,7 @@ namespace ToDoList.BL.Controller.Tests
         [TestMethod()]
         public void AddTest()
         {
+            //Arrange
             var userName = Guid.NewGuid().ToString();
             var affairName = Guid.NewGuid().ToString();
             var affairDescription = Guid.NewGuid().ToString();

@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Globalization;
+using System.Resources;
 using ToDoList.BL.Controller;
 using ToDoList.BL.Model;
+using System.Threading;
 
 namespace ToDoList.CMD
 {
@@ -8,9 +11,12 @@ namespace ToDoList.CMD
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Вас приветствует консольное приложение ToDoList!");
 
-            Console.Write("Введите ваше имя: ");
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en-US");
+
+            Console.WriteLine(Languages.Messages.Welcome);
+            Console.Write(Languages.Messages.EnterName);
+
             var name = Console.ReadLine();
 
             var userController = new UserController(name);
@@ -19,16 +25,16 @@ namespace ToDoList.CMD
 
             if (userController.IsNewUser)
             {
-                Console.Write("Введите пол: ");
+                Console.Write(Languages.Messages.EnterGender);
                 var gender = Console.ReadLine();
-                var birthDate = ParseDateTime("дату рождения");
+                var birthDate = ParseDateTime("дата рождения");
 
                 userController.SetNewUserData(gender, birthDate);
             }
 
             Console.WriteLine(userController.CurrentUser);
 
-            Console.WriteLine("Что вы хотите сделать?");
+            Console.WriteLine(Languages.Messages.WhatToDo);
             Console.WriteLine("A - добавить новое дело");
             var key = Console.ReadKey();
             Console.WriteLine();
@@ -53,7 +59,7 @@ namespace ToDoList.CMD
             var affair = Console.ReadLine();
             Console.Write("Введите описание дела: ");
             var description = Console.ReadLine();
-            var duration = ParseTimeSpan("дела");
+            var duration = ParseTimeSpan("дело");
             var moment = ParseDateTime("дату начала выполнения списка дел");
 
             var bussiness = new Affair(affair, description, duration, moment);
@@ -67,7 +73,7 @@ namespace ToDoList.CMD
             TimeSpan duration;
             while (true)
             {
-                Console.Write($"Введите продолжительность {v} (hh:mm:ss): ");
+                Console.Write($"Введите продолжительность события {v} (hh:mm:ss): ");
                 if (TimeSpan.TryParse(Console.ReadLine(), out duration))
                 {
                     break;
@@ -90,7 +96,7 @@ namespace ToDoList.CMD
             DateTime birthDate;
             while (true)
             {
-                Console.Write($"Введите {name} (dd.MM.yyyy): ");
+                Console.Write($"Введите параметр {name} (dd.MM.yyyy): ");
                 if (DateTime.TryParse(Console.ReadLine(), out birthDate))
                 {
                     break;
