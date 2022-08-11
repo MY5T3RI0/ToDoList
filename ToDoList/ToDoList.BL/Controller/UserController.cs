@@ -10,8 +10,9 @@ namespace ToDoList.BL.Controller
     /// <summary>
     /// Контроллер пользователя.
     /// </summary>
-    public class UserController
+    public class UserController : ControllerBase
     {
+        public const string USERS_FILE_NAME = "users.dat";
         /// <summary>
         /// Пользователь приложения.
         /// </summary>
@@ -29,7 +30,7 @@ namespace ToDoList.BL.Controller
         {
             if (string.IsNullOrWhiteSpace(userName))
             {
-                throw new ArgumentException("Имя пользователя не может быть пустым", nameof(userName));
+                throw new ArgumentException("Имя пользователя не может быть пустым.", nameof(userName));
             }
 
             Users = GetUsersData();
@@ -50,19 +51,7 @@ namespace ToDoList.BL.Controller
         /// </summary>
         private List<User> GetUsersData()
         {
-            var formatter = new BinaryFormatter();
-
-            using (var file = new FileStream("users.dat", FileMode.OpenOrCreate))
-            {
-                if (file.Length > 0 && formatter.Deserialize(file) is List<User> users)
-                {
-                    return users;
-                }
-                else
-                {
-                    return new List<User>();
-                }
-            }
+            return Load<List<User>>(USERS_FILE_NAME) ?? new List<User>();
         }
 
         /// <summary>
@@ -74,12 +63,12 @@ namespace ToDoList.BL.Controller
         {
             if (string.IsNullOrWhiteSpace(genderName))
             {
-                throw new ArgumentException("Имя пользователя не может быть пустым или null", nameof(genderName));
+                throw new ArgumentException("Имя пользователя не может быть пустым или null.", nameof(genderName));
             }
 
-            if (DateTime.Now.Year - birthDate.Year >= 100 || DateTime.Now.Year - birthDate.Year <= 1)
+            if (DateTime.Now.Year - birthDate.Year >= 100 || DateTime.UtcNow.Year - birthDate.Year <= 1)
             {
-                throw new ArgumentException("Некорректная дата рождения", nameof(birthDate));
+                throw new ArgumentException("Некорректная дата рождения.", nameof(birthDate));
             }
 
             CurrentUser.Gender = new Gender(genderName);
@@ -92,13 +81,7 @@ namespace ToDoList.BL.Controller
         /// </summary>
         public void Save()
         {
-            var formatter = new BinaryFormatter();
-
-            using (var file = new FileStream("users.dat", FileMode.OpenOrCreate))
-            {
-                formatter.Serialize(file, Users);
-            }
-
+            Save(USERS_FILE_NAME, Users);
         }
     }
 }

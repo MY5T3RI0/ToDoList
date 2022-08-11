@@ -37,7 +37,7 @@ namespace ToDoList.BL.Model
         /// </summary>
         public DateTime BirthDate { get; set; }
 
-        public int Age { get { return DateTime.Now.Year - BirthDate.Year; } }
+        public int Age { get { return DateTime.UtcNow.Year - BirthDate.Year; } }
 
         /// <summary>
         /// Создать нового пользователя
@@ -49,15 +49,15 @@ namespace ToDoList.BL.Model
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentNullException("Имя пользователя не может быть пустым или null", nameof(name));
+                throw new ArgumentNullException("Имя пользователя не может быть пустым или null.", nameof(name));
             }
 
-            if (DateTime.Now.Year - birthDate.Year >= 100 || DateTime.Now.Year - birthDate.Year <= 1)
+            if (DateTime.UtcNow.Year - birthDate.Year >= 100 || DateTime.UtcNow.Year - birthDate.Year <= 1)
             {
-                throw new ArgumentException("Некорректная дата рождения", nameof(birthDate));
+                throw new ArgumentException("Некорректная дата рождения.", nameof(birthDate));
             }
 
-            Gender = gender ?? throw new ArgumentNullException("Пол не может быть null", nameof(gender));
+            Gender = gender ?? throw new ArgumentNullException("Пол не может быть null.", nameof(gender));
 
             BirthDate = birthDate;
             Name = name;
@@ -65,11 +65,14 @@ namespace ToDoList.BL.Model
             ID = ObjectNumber;
         }
 
+        /// <summary>
+        /// Создать нового пользователя
+        /// </summary>
         public User(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentNullException("Имя пользователя не может быть пустым или null", nameof(name));
+                throw new ArgumentNullException("Имя пользователя не может быть пустым или null.", nameof(name));
             }
 
             Name = name;
